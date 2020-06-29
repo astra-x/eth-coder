@@ -1,0 +1,29 @@
+{
+  "name": "eth-coder",
+  "version": "1.0.2",
+  "description": "eth-coder",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/astra-x/eth-coder.git"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "LGPL-3.0",
+  "devDependencies": {
+    "@types/bn.js": "^4.11.6",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "bn.js": "^5.1.2",
+    "web3-eth-abi": "^1.2.9",
+    "web3-eth-contract": "^1.2.9",
+    "web3-utils": "^1.2.9"
+  }
+}
