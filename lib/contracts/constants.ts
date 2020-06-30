@@ -15,16 +15,10 @@
  along with eth-coder.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @file index.ts
+ * @file constants.ts
  * @author Youtao Xing <youtao.xing@icloud.com>
  * @date 2020
  */
 
-export {
-  Item,
-  Param,
-  Method,
-  Coder
-} from './coder';
-
-export { Erc20 } from './contracts/constants'
+// contracts/token/erc20
+export { Erc20 } from './token/erc20/erc20'
