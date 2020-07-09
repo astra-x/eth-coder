@@ -24,7 +24,7 @@ import BN from 'bn.js';
 import { AbiItem, AbiInput, sha3 } from 'web3-utils';
 import abi from 'web3-eth-abi';
 
-export { AbiItem as Item } from 'web3-utils';
+export { AbiItem as Item, AbiInput as Input } from 'web3-utils';
 
 export interface Param {
   name: string;
@@ -33,6 +33,11 @@ export interface Param {
 }
 
 export interface Method {
+  name: string | undefined;
+  params: Param[];
+}
+
+export interface Event {
   name: string | undefined;
   params: Param[];
 }
@@ -108,6 +113,8 @@ export class Coder {
 
       for (let i = 0; i < inputs.length; i++) {
         const isAddress = inputs[i].type.indexOf('address') === 0;
+        const isInt = inputs[i].type.indexOf('int') === 0;
+        const isUint = inputs[i].type.indexOf('uint') === 0;
         let value: string | string[];
 
         if (isAddress) {
@@ -116,12 +123,64 @@ export class Coder {
           } else {
             value = decodedParams[i].toLowerCase();
           }
-        } else {  // isUint || isInt
+        } else if (isInt || isUint) {  // isInt || isUint
           if (Array.isArray(decodedParams[i])) {
             value = (<(number | string | number[] | Uint8Array | Buffer | BN)[]>decodedParams[i]).map(val => new BN(val).toString());
           } else {
-            value = decodedParams[i].toLowerCase();
+            value = new BN(decodedParams[i]).toString();
           }
+        } else {
+          value = decodedParams[i];
+        }
+
+        params.push({
+          name: inputs[i].name,
+          value: value,
+          type: inputs[i].type,
+        });
+      }
+    } else {
+      return null;
+    }
+
+    return {
+      name: item.name,
+      params: params,
+    }
+  }
+
+  /**
+   * Decodes txReceipt.logs[].data and txReceipt.logs[].topics to event and parameters.
+   *
+   * @method decodeEvent
+   * @param { string } data the txReceipt.logs[].data
+   * @param { string[] } topics the txReceipt.logs[].topics
+   * @return { Event | null } the decoded event and parameters
+   */
+  decodeEvent(data: string, topics: string[]): Event | null {
+    if (topics.length < 1) {
+      return null;
+    }
+    const item: AbiItem = this._events[topics[0]];
+    let params: Param[] = [];
+
+    if (item && item.inputs) {
+      let inputs: AbiInput[] = item.inputs;
+      let decodedParams: { [key: string]: string } =
+        this._abiCoder.decodeLog(inputs, data, topics.slice(1));
+
+      for (let i = 0; i < inputs.length; i++) {
+        const isAddress = inputs[i].type.indexOf('address') === 0;
+        const isInt = inputs[i].type.indexOf('int') === 0;
+        const isUint = inputs[i].type.indexOf('uint') === 0;
+        let value: string | string[];
+
+        if (isAddress) {
+          value = decodedParams[i].toLowerCase();
+        } else if (isInt || isUint) {  // isInt || isUint
+          value = new BN(decodedParams[i]).toString();
+        } else {
+          value = decodedParams[i];
         }
 
         params.push({
