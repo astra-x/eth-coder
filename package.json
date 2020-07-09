@@ -13,7 +13,11 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["typescript", "ethereum", "coder"],
+  "keywords": [
+    "typescript",
+    "ethereum",
+    "coder"
+  ],
   "author": "",
   "license": "LGPL-3.0",
   "devDependencies": {

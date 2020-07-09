@@ -48,6 +48,7 @@ export class Coder {
   private _contract: any;
   private _abiCoder: abi.AbiCoder = <abi.AbiCoder><any>abi;
   private _methods: { [index: string]: AbiItem } = {};
+  private _events: { [index: string]: AbiItem } = {};
 
   constructor(items: AbiItem[]) {
     const Contract = require('web3-eth-contract');
@@ -55,16 +56,22 @@ export class Coder {
 
     items.map(item => {
       if (item.name) {
-        // function hash: web3.sha3('transfer(address,uint256)')
-        // signature: the first 32bit of the function hash
         const hash: string | null = sha3(
           item.name +
           '(' +
           item.inputs?.map(input => input.type).join(',') +
           ')'
         );
-        if (hash && 'function' === item.type) {
-          this._methods[hash.slice(2, 10)] = item;
+        if (hash) {
+          if ('function' === item.type) {
+            // method hash: web3.sha3('transfer(address,uint256)')
+            // signature: the first 32bit of the method hash
+            this._methods[hash.slice(2, 10)] = item;
+          } else if ('event' === item.type) {
+            // event hash: web3.sha3('Transfer(address,address,uint256)')
+            // signature: the event hash
+            this._events[hash] = item;
+          }
         }
       }
     });
