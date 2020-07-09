@@ -73,23 +73,23 @@ export class Coder {
   /**
    * Encodes parameters for a method, including method signature.
    *
-   * @method encodeAbi
+   * @method encodeMethod
    * @param { string } method
    * @param { ...any[] } params the method's parameters
    * @return { string } the tx.data including the invoked method signature and encoded parameters
    */
-  encodeAbi(method: string, ...params: any[]): string {
+  encodeMethod(method: string, ...params: any[]): string {
     return this._contract.methods[method](...params).encodeABI();
   }
 
   /**
    * Decodes tx.input to method and parameters.
    *
-   * @method decodeAbi
+   * @method decodeMethod
    * @param { string } data the tx.input including the method signature and encoded parameters
    * @return { Method | null } the decoded method and parameters
    */
-  decodeAbi(data: string): Method | null {
+  decodeMethod(data: string): Method | null {
     const signature: string = data.slice(2, 10);
     const item: AbiItem = this._methods[signature];
     let params: Param[] = [];

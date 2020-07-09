@@ -1,6 +1,6 @@
 {
   "name": "eth-coder",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "eth-coder",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
@@ -13,7 +13,7 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["typescript", "ethereum", "coder"],
   "author": "",
   "license": "LGPL-3.0",
   "devDependencies": {
