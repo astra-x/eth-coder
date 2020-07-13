@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "typescript",
@@ -22,7 +22,10 @@
   "license": "LGPL-3.0",
   "devDependencies": {
     "@types/bn.js": "^4.11.6",
-    "typescript": "^3.9.5"
+    "@types/jest": "^26.0.4",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6"
   },
   "dependencies": {
     "bn.js": "^5.1.2",
@@ -30,5 +33,17 @@
     "web3-eth-abi": "^1.2.9",
     "web3-eth-contract": "^1.2.9",
     "web3-utils": "^1.2.9"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "lib/**"
+    ],
+    "coverageReporters":["lcov"],
+    "coverageDirectory": "coverage"
   }
 }
